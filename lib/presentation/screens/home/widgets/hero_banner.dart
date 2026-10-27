@@ -30,7 +30,7 @@ class _HeroBannerState extends State<HeroBanner> {
           height: 220,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: AppColors.border),
+            border: Border.all(color: context.appBorder),
           ),
           child: Stack(
             children: [
@@ -106,7 +106,9 @@ class _HeroBannerState extends State<HeroBanner> {
                 width: _activeDot == index ? 16 : 6,
                 height: 6,
                 decoration: BoxDecoration(
-                  color: _activeDot == index ? AppColors.limeAccent : AppColors.borderLight,
+                  color: _activeDot == index
+                      ? (context.isDarkMode ? AppColors.limeAccent : AppColors.lightTextPrimary)
+                      : context.appBorder,
                   borderRadius: BorderRadius.circular(3),
                 ),
               ),

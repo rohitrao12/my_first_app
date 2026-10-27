@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../../core/theme/app_colors.dart';
 
 /// Robust image component that gracefully handles network loading and offline fallbacks
-/// with athletic dark gradient placeholders.
+/// with athletic dark / light gradient placeholders.
 class CustomImage extends StatelessWidget {
   final String imageUrl;
   final double? width;
@@ -64,27 +64,34 @@ class CustomImage extends StatelessWidget {
   }
 
   Widget _buildPlaceholder(BuildContext context, {required bool isLoading}) {
+    final isDark = context.isDarkMode;
+
     return Container(
       width: width,
       height: height,
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color(0xFF1F2024),
-            Color(0xFF141517),
-          ],
+          colors: isDark
+              ? const [
+                  Color(0xFF1F2024),
+                  Color(0xFF141517),
+                ]
+              : const [
+                  Color(0xFFF3F4F6),
+                  Color(0xFFE5E7EB),
+                ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
       ),
       child: Center(
         child: isLoading
-            ? const SizedBox(
+            ? SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  color: AppColors.limeAccent,
+                  color: isDark ? AppColors.limeAccent : AppColors.limeAccentDark,
                 ),
               )
             : LayoutBuilder(
@@ -99,15 +106,15 @@ class CustomImage extends StatelessWidget {
                         children: [
                           Icon(
                             Icons.fitness_center_rounded,
-                            color: const Color(0xFF33353B),
+                            color: isDark ? const Color(0xFF33353B) : const Color(0xFF9CA3AF),
                             size: isSmall ? 22 : 32,
                           ),
                           if (!isSmall) ...[
                             const SizedBox(height: 3),
-                            const Text(
+                            Text(
                               '11FIT',
                               style: TextStyle(
-                                color: Color(0xFF484B54),
+                                color: isDark ? const Color(0xFF484B54) : const Color(0xFF6B7280),
                                 fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
                                 fontSize: 11,

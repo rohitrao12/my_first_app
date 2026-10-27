@@ -40,12 +40,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         : [widget.product.imageUrl];
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: context.appTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         actions: [
@@ -55,7 +55,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               return IconButton(
                 icon: Icon(
                   isWishlisted ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                  color: isWishlisted ? AppColors.error : AppColors.textPrimary,
+                  color: isWishlisted ? AppColors.error : context.appTextPrimary,
                 ),
                 onPressed: () {
                   context.read<WishlistBloc>().add(ToggleWishlistEvent(widget.product));
@@ -64,12 +64,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.share_outlined, color: AppColors.textPrimary),
+            icon: Icon(Icons.share_outlined, color: context.appTextPrimary),
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  backgroundColor: AppColors.cardElevated,
-                  content: Text('Product link copied: ${widget.product.name}'),
+                  backgroundColor: context.appCardElevated,
+                  content: Text(
+                    'Product link copied: ${widget.product.name}',
+                    style: TextStyle(color: context.appTextPrimary),
+                  ),
                   duration: const Duration(seconds: 2),
                 ),
               );
@@ -128,8 +131,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           height: 6,
                           decoration: BoxDecoration(
                             color: _selectedImageIndex == index
-                                ? AppColors.limeAccent
-                                : AppColors.borderLight,
+                                ? (context.isDarkMode ? AppColors.limeAccent : AppColors.lightTextPrimary)
+                                : context.appBorder,
                             borderRadius: BorderRadius.circular(3),
                           ),
                         ),
@@ -148,10 +151,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: [
                   Text(
                     widget.product.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.textPrimary,
+                      color: context.appTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -161,28 +164,28 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                       Row(
                         children: List.generate(
                           5,
-                          (i) => const Icon(
+                          (i) => Icon(
                             Icons.star_rounded,
                             size: 18,
-                            color: AppColors.limeAccent,
+                            color: context.isDarkMode ? AppColors.limeAccent : AppColors.starRating,
                           ),
                         ),
                       ),
                       const SizedBox(width: 8),
                       Text(
                         '${widget.product.rating}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.limeAccent,
+                          color: context.isDarkMode ? AppColors.limeAccent : AppColors.starRating,
                         ),
                       ),
                       const SizedBox(width: 4),
                       Text(
                         '(${widget.product.reviewCount} reviews)',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
-                          color: AppColors.textSecondary,
+                          color: context.appTextSecondary,
                         ),
                       ),
                     ],
@@ -193,20 +196,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     children: [
                       Text(
                         '₹${widget.product.price.toInt()}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 26,
                           fontWeight: FontWeight.w900,
-                          color: AppColors.textPrimary,
+                          color: context.appTextPrimary,
                         ),
                       ),
                       const SizedBox(width: 12),
                       if (widget.product.originalPrice > widget.product.price)
                         Text(
                           '₹${widget.product.originalPrice.toInt()}',
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: AppColors.textMuted,
+                            color: context.appTextMuted,
                             decoration: TextDecoration.lineThrough,
                           ),
                         ),
@@ -223,18 +226,27 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Container(
                 padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 12),
                 decoration: BoxDecoration(
-                  color: AppColors.cardBackground,
+                  color: context.appCard,
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: context.appBorder),
+                  boxShadow: context.isDarkMode
+                      ? null
+                      : [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.03),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    _buildFeatureItem(Icons.all_out_rounded, '4-way Stretch'),
-                    Container(height: 28, width: 1, color: AppColors.border),
-                    _buildFeatureItem(Icons.air_rounded, 'Breathable Fabric'),
-                    Container(height: 28, width: 1, color: AppColors.border),
-                    _buildFeatureItem(Icons.flash_on_rounded, 'Quick Dry'),
+                    _buildFeatureItem(context, Icons.all_out_rounded, '4-way Stretch'),
+                    Container(height: 28, width: 1, color: context.appBorder),
+                    _buildFeatureItem(context, Icons.air_rounded, 'Breathable Fabric'),
+                    Container(height: 28, width: 1, color: context.appBorder),
+                    _buildFeatureItem(context, Icons.flash_on_rounded, 'Quick Dry'),
                   ],
                 ),
               ),
@@ -251,26 +263,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
+                      Text(
                         'Select Size',
                         style: TextStyle(
                           fontSize: 15,
                           fontWeight: FontWeight.w700,
-                          color: AppColors.textPrimary,
+                          color: context.appTextPrimary,
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
                           _showSizeChartModal(context);
                         },
-                        child: const Text(
+                        child: Text(
                           'Size Chart',
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: AppColors.limeAccent,
+                            color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                             decoration: TextDecoration.underline,
-                            decorationColor: AppColors.limeAccent,
+                            decorationColor: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                           ),
                         ),
                       ),
@@ -293,10 +305,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             width: 50,
                             height: 44,
                             decoration: BoxDecoration(
-                              color: isSelected ? AppColors.textPrimary : AppColors.cardBackground,
+                              color: isSelected ? context.appTextPrimary : context.appCard,
                               borderRadius: BorderRadius.circular(8),
                               border: Border.all(
-                                color: isSelected ? AppColors.textPrimary : AppColors.border,
+                                color: isSelected ? context.appTextPrimary : context.appBorder,
                                 width: 1.5,
                               ),
                             ),
@@ -306,7 +318,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
-                                color: isSelected ? AppColors.background : AppColors.textPrimary,
+                                color: isSelected ? context.appBackground : context.appTextPrimary,
                               ),
                             ),
                           ),
@@ -326,12 +338,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Available Colors',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+                      color: context.appTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -355,7 +367,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: isSelected ? AppColors.limeAccent : Colors.transparent,
+                                color: isSelected
+                                    ? (context.isDarkMode ? AppColors.limeAccent : AppColors.lightTextPrimary)
+                                    : Colors.transparent,
                                 width: 2,
                               ),
                             ),
@@ -365,7 +379,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               decoration: BoxDecoration(
                                 color: swatchColor,
                                 shape: BoxShape.circle,
-                                border: Border.all(color: AppColors.border, width: 1),
+                                border: Border.all(color: context.appBorder, width: 1),
                               ),
                             ),
                           ),
@@ -384,20 +398,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
+                  Text(
                     'Description',
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w700,
-                      color: AppColors.textPrimary,
+                      color: context.appTextPrimary,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     widget.product.description,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
-                      color: AppColors.textSecondary,
+                      color: context.appTextSecondary,
                       height: 1.5,
                     ),
                   ),
@@ -405,15 +419,24 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
 
-            const SizedBox(height: 100), // Spacing for sticky bottom bar
+            const SizedBox(height: 100),
           ],
         ),
       ),
       bottomSheet: Container(
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-        decoration: const BoxDecoration(
-          color: AppColors.backgroundSecondary,
-          border: Border(top: BorderSide(color: AppColors.border)),
+        decoration: BoxDecoration(
+          color: context.appBackgroundSecondary,
+          border: Border(top: BorderSide(color: context.appBorder)),
+          boxShadow: context.isDarkMode
+              ? null
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, -2),
+                  ),
+                ],
         ),
         child: SafeArea(
           child: Row(
@@ -423,14 +446,14 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                   final isWishlisted = state.isWishlisted(widget.product.id);
                   return Container(
                     decoration: BoxDecoration(
-                      color: AppColors.cardBackground,
+                      color: context.appCard,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: AppColors.border),
+                      border: Border.all(color: context.appBorder),
                     ),
                     child: IconButton(
                       icon: Icon(
                         isWishlisted ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                        color: isWishlisted ? AppColors.error : AppColors.textPrimary,
+                        color: isWishlisted ? AppColors.error : context.appTextPrimary,
                       ),
                       onPressed: () {
                         context.read<WishlistBloc>().add(ToggleWishlistEvent(widget.product));
@@ -457,27 +480,32 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        backgroundColor: AppColors.cardElevated,
+                        backgroundColor: context.appCardElevated,
                         behavior: SnackBarBehavior.floating,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(color: AppColors.limeAccent),
+                          side: BorderSide(
+                            color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
+                          ),
                         ),
                         content: Row(
                           children: [
-                            const Icon(Icons.check_circle_rounded, color: AppColors.limeAccent),
+                            Icon(
+                              Icons.check_circle_rounded,
+                              color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
+                            ),
                             const SizedBox(width: 10),
                             Expanded(
                               child: Text(
                                 'Added to Cart: ${widget.product.name} ($_selectedSize)',
-                                style: const TextStyle(color: AppColors.textPrimary),
+                                style: TextStyle(color: context.appTextPrimary),
                               ),
                             ),
                           ],
                         ),
                         action: SnackBarAction(
                           label: 'VIEW CART',
-                          textColor: AppColors.limeAccent,
+                          textColor: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                           onPressed: () {
                             Navigator.of(context).push(
                               MaterialPageRoute(
@@ -498,17 +526,17 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     );
   }
 
-  Widget _buildFeatureItem(IconData icon, String label) {
+  Widget _buildFeatureItem(BuildContext context, IconData icon, String label) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        Icon(icon, color: AppColors.textPrimary, size: 22),
+        Icon(icon, color: context.appTextPrimary, size: 22),
         const SizedBox(height: 6),
         Text(
           label,
-          style: const TextStyle(
+          style: TextStyle(
             fontSize: 11,
-            color: AppColors.textSecondary,
+            color: context.appTextSecondary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -519,11 +547,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   void _showSizeChartModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.cardBackground,
+      backgroundColor: context.appCard,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) {
+      builder: (ctx) {
         return Padding(
           padding: const EdgeInsets.all(24.0),
           child: Column(
@@ -533,67 +561,76 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Size Guide (Inches)',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: ctx.appTextPrimary,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: AppColors.textSecondary),
-                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close, color: ctx.appTextSecondary),
+                    onPressed: () => Navigator.pop(ctx),
                   ),
                 ],
               ),
               const SizedBox(height: 16),
               Table(
-                border: TableBorder.all(color: AppColors.border),
-                children: const [
+                border: TableBorder.all(color: ctx.appBorder),
+                children: [
                   TableRow(
-                    decoration: BoxDecoration(color: AppColors.cardElevated),
+                    decoration: BoxDecoration(color: ctx.appCardElevated),
                     children: [
                       Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Size', style: TextStyle(fontWeight: FontWeight.bold)),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Size',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: ctx.appTextPrimary),
+                        ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Waist', style: TextStyle(fontWeight: FontWeight.bold)),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Waist',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: ctx.appTextPrimary),
+                        ),
                       ),
                       Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text('Length', style: TextStyle(fontWeight: FontWeight.bold)),
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Length',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: ctx.appTextPrimary),
+                        ),
                       ),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('S')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('28 - 30')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('17"')),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('S', style: TextStyle(color: ctx.appTextPrimary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('28 - 30', style: TextStyle(color: ctx.appTextSecondary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('17"', style: TextStyle(color: ctx.appTextSecondary))),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('M')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('30 - 32')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('18"')),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('M', style: TextStyle(color: ctx.appTextPrimary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('30 - 32', style: TextStyle(color: ctx.appTextSecondary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('18"', style: TextStyle(color: ctx.appTextSecondary))),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('L')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('32 - 34')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('19"')),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('L', style: TextStyle(color: ctx.appTextPrimary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('32 - 34', style: TextStyle(color: ctx.appTextSecondary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('19"', style: TextStyle(color: ctx.appTextSecondary))),
                     ],
                   ),
                   TableRow(
                     children: [
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('XL')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('34 - 36')),
-                      Padding(padding: EdgeInsets.all(8.0), child: Text('20"')),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('XL', style: TextStyle(color: ctx.appTextPrimary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('34 - 36', style: TextStyle(color: ctx.appTextSecondary))),
+                      Padding(padding: const EdgeInsets.all(8.0), child: Text('20"', style: TextStyle(color: ctx.appTextSecondary))),
                     ],
                   ),
                 ],

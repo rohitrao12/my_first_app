@@ -26,12 +26,12 @@ class _CartScreenState extends State<CartScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: context.appTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: BlocBuilder<CartBloc, CartState>(
@@ -39,19 +39,19 @@ class _CartScreenState extends State<CartScreen> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
+                Text(
                   'My Cart',
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.textPrimary,
+                    color: context.appTextPrimary,
                   ),
                 ),
                 Text(
                   '${state.totalItemCount} Items',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
-                    color: AppColors.textSecondary,
+                    color: context.appTextSecondary,
                   ),
                 ),
               ],
@@ -68,27 +68,27 @@ class _CartScreenState extends State<CartScreen> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.shopping_bag_outlined,
                       size: 64,
-                      color: AppColors.textMuted,
+                      color: context.appTextMuted,
                     ),
                     const SizedBox(height: 16),
-                    const Text(
+                    Text(
                       'Your Cart is Empty',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: context.appTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Looks like you haven\'t added any items to your cart yet.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 13,
-                        color: AppColors.textSecondary,
+                        color: context.appTextSecondary,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -139,9 +139,18 @@ class _CartScreenState extends State<CartScreen> {
                 Container(
                   padding: const EdgeInsets.all(16),
                   decoration: BoxDecoration(
-                    color: AppColors.cardBackground,
+                    color: context.appCard,
                     borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: context.appBorder),
+                    boxShadow: context.isDarkMode
+                        ? null
+                        : [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 8,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                   ),
                   child: Column(
                     children: [
@@ -150,17 +159,17 @@ class _CartScreenState extends State<CartScreen> {
                         children: [
                           Text(
                             'Price (${state.totalItemCount} items)',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.textSecondary,
+                              color: context.appTextSecondary,
                             ),
                           ),
                           Text(
                             '₹${state.subtotal.toInt()}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.textPrimary,
+                              color: context.appTextPrimary,
                             ),
                           ),
                         ],
@@ -169,32 +178,32 @@ class _CartScreenState extends State<CartScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Discount',
                             style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.textSecondary,
+                              color: context.appTextSecondary,
                             ),
                           ),
                           Text(
                             '-₹${state.discountAmount.toInt()}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.limeAccent,
+                              color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                             ),
                           ),
                         ],
                       ),
                       const SizedBox(height: 10),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
                             'Shipping',
                             style: TextStyle(
                               fontSize: 14,
-                              color: AppColors.textSecondary,
+                              color: context.appTextSecondary,
                             ),
                           ),
                           Text(
@@ -202,29 +211,29 @@ class _CartScreenState extends State<CartScreen> {
                             style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w700,
-                              color: AppColors.limeAccent,
+                              color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                             ),
                           ),
                         ],
                       ),
-                      const Divider(height: 24),
+                      Divider(height: 24, color: context.appBorder),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Total',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: AppColors.textPrimary,
+                              color: context.appTextPrimary,
                             ),
                           ),
                           Text(
                             '₹${state.finalTotal.toInt()}',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.w900,
-                              color: AppColors.textPrimary,
+                              color: context.appTextPrimary,
                             ),
                           ),
                         ],
@@ -253,21 +262,21 @@ class _CartScreenState extends State<CartScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
                   decoration: BoxDecoration(
-                    color: AppColors.cardBackground,
+                    color: context.appCard,
                     borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: context.appBorder),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.local_offer_outlined, color: AppColors.textSecondary, size: 20),
+                      Icon(Icons.local_offer_outlined, color: context.appTextSecondary, size: 20),
                       const SizedBox(width: 10),
                       Expanded(
                         child: TextField(
                           controller: _couponController,
-                          style: const TextStyle(color: AppColors.textPrimary, fontSize: 13),
-                          decoration: const InputDecoration(
+                          style: TextStyle(color: context.appTextPrimary, fontSize: 13),
+                          decoration: InputDecoration(
                             hintText: 'Have a coupon code?',
-                            hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 13),
+                            hintStyle: TextStyle(color: context.appTextMuted, fontSize: 13),
                             border: InputBorder.none,
                             isDense: true,
                           ),
@@ -279,16 +288,19 @@ class _CartScreenState extends State<CartScreen> {
                             context.read<CartBloc>().add(ApplyCouponEvent(_couponController.text));
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                backgroundColor: AppColors.cardElevated,
-                                content: Text('Coupon ${_couponController.text.toUpperCase()} verified!'),
+                                backgroundColor: context.appCardElevated,
+                                content: Text(
+                                  'Coupon ${_couponController.text.toUpperCase()} verified!',
+                                  style: TextStyle(color: context.appTextPrimary),
+                                ),
                               ),
                             );
                           }
                         },
-                        child: const Text(
+                        child: Text(
                           'Apply',
                           style: TextStyle(
-                            color: AppColors.limeAccent,
+                            color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                             fontWeight: FontWeight.bold,
                             fontSize: 13,
                           ),
@@ -310,7 +322,7 @@ class _CartScreenState extends State<CartScreen> {
   void _showCheckoutConfirmation(BuildContext context, CartState state) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.cardBackground,
+      backgroundColor: context.appCard,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
@@ -325,41 +337,41 @@ class _CartScreenState extends State<CartScreen> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: AppColors.borderLight,
+                  color: ctx.appBorder,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               const SizedBox(height: 20),
-              const Icon(
+              Icon(
                 Icons.check_circle_rounded,
-                color: AppColors.limeAccent,
+                color: ctx.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                 size: 64,
               ),
               const SizedBox(height: 16),
-              const Text(
+              Text(
                 'Ready to Place Order',
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: ctx.appTextPrimary,
                 ),
               ),
               const SizedBox(height: 8),
               Text(
                 'Total Payable: ₹${state.finalTotal.toInt()}',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w700,
-                  color: AppColors.limeAccent,
+                  color: ctx.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Deliver to: Rohit Rao\nFlat 402, Elite Heights, Mumbai, 400001',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
-                  color: AppColors.textSecondary,
+                  color: ctx.appTextSecondary,
                 ),
               ),
               const SizedBox(height: 24),
@@ -372,15 +384,18 @@ class _CartScreenState extends State<CartScreen> {
                   Navigator.pop(ctx);
                   context.read<CartBloc>().add(const ClearCartEvent());
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      backgroundColor: AppColors.cardElevated,
+                    SnackBar(
+                      backgroundColor: context.appCardElevated,
                       content: Row(
                         children: [
-                          Icon(Icons.done_all_rounded, color: AppColors.limeAccent),
-                          SizedBox(width: 10),
+                          Icon(
+                            Icons.done_all_rounded,
+                            color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
+                          ),
+                          const SizedBox(width: 10),
                           Text(
                             'Order #11FIT-${8923} Placed Successfully!',
-                            style: TextStyle(color: AppColors.textPrimary),
+                            style: TextStyle(color: context.appTextPrimary),
                           ),
                         ],
                       ),

@@ -18,27 +18,27 @@ class CategoriesScreen extends StatelessWidget {
     final repo = MockShopRepository();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: context.appTextPrimary),
           onPressed: () {
             context.read<NavigationCubit>().setTab(0);
           },
         ),
-        title: const Text(
+        title: Text(
           'Categories',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: context.appTextPrimary,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search_rounded, color: AppColors.textPrimary),
+            icon: Icon(Icons.search_rounded, color: context.appTextPrimary),
             onPressed: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
@@ -64,7 +64,7 @@ class CategoriesScreen extends StatelessWidget {
                   height: 150,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: context.appBorder),
                   ),
                   child: Stack(
                     children: [
@@ -102,7 +102,7 @@ class CategoriesScreen extends StatelessWidget {
                                 fontSize: 20,
                                 fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
-                                color: AppColors.textPrimary,
+                                color: Colors.white,
                                 height: 1.15,
                               ),
                             ),

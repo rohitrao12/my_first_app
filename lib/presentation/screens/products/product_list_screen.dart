@@ -34,7 +34,6 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   void initState() {
     super.initState();
-    // Filter product bloc by this category
     context.read<ProductBloc>().add(FilterByCategoryEvent(widget.categoryTitle));
   }
 
@@ -47,22 +46,22 @@ class _ProductListScreenState extends State<ProductListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: context.appTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: _isSearching
             ? TextField(
                 controller: _searchController,
                 autofocus: true,
-                style: const TextStyle(color: AppColors.textPrimary),
-                decoration: const InputDecoration(
+                style: TextStyle(color: context.appTextPrimary),
+                decoration: InputDecoration(
                   hintText: 'Search products...',
-                  hintStyle: TextStyle(color: AppColors.textSecondary),
+                  hintStyle: TextStyle(color: context.appTextSecondary),
                   border: InputBorder.none,
                 ),
                 onChanged: (val) {
@@ -71,17 +70,17 @@ class _ProductListScreenState extends State<ProductListScreen> {
               )
             : Text(
                 widget.categoryTitle,
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.textPrimary,
+                  color: context.appTextPrimary,
                 ),
               ),
         actions: [
           IconButton(
             icon: Icon(
               _isSearching ? Icons.close_rounded : Icons.search_rounded,
-              color: AppColors.textPrimary,
+              color: context.appTextPrimary,
             ),
             onPressed: () {
               setState(() {
@@ -94,7 +93,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.tune_rounded, color: AppColors.textPrimary),
+            icon: Icon(Icons.tune_rounded, color: context.appTextPrimary),
             onPressed: () {
               _showFilterBottomSheet(context);
             },
@@ -131,11 +130,24 @@ class _ProductListScreenState extends State<ProductListScreen> {
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                         decoration: BoxDecoration(
-                          color: isSelected ? AppColors.limeAccent : AppColors.cardBackground,
+                          color: isSelected
+                              ? (context.isDarkMode ? AppColors.limeAccent : AppColors.lightTextPrimary)
+                              : context.appCard,
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                            color: isSelected ? AppColors.limeAccent : AppColors.border,
+                            color: isSelected
+                                ? (context.isDarkMode ? AppColors.limeAccent : AppColors.lightTextPrimary)
+                                : context.appBorder,
                           ),
+                          boxShadow: context.isDarkMode || !isSelected
+                              ? null
+                              : [
+                                  BoxShadow(
+                                    color: Colors.black.withValues(alpha: 0.1),
+                                    blurRadius: 4,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
                         ),
                         alignment: Alignment.center,
                         child: Text(
@@ -143,7 +155,9 @@ class _ProductListScreenState extends State<ProductListScreen> {
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                            color: isSelected ? AppColors.textOnLime : AppColors.textPrimary,
+                            color: isSelected
+                                ? (context.isDarkMode ? AppColors.textOnLime : Colors.white)
+                                : context.appTextPrimary,
                           ),
                         ),
                       ),
@@ -159,7 +173,7 @@ class _ProductListScreenState extends State<ProductListScreen> {
                   '${products.length} Products',
                   style: AppTextStyles.bodySmall.copyWith(
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textSecondary,
+                    color: context.appTextSecondary,
                   ),
                 ),
               ),
@@ -171,16 +185,16 @@ class _ProductListScreenState extends State<ProductListScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
+                            Icon(
                               Icons.search_off_rounded,
                               size: 56,
-                              color: AppColors.textMuted,
+                              color: context.appTextMuted,
                             ),
                             const SizedBox(height: 12),
                             Text(
                               'No products found in "$_activeSubcategory"',
-                              style: const TextStyle(
-                                color: AppColors.textSecondary,
+                              style: TextStyle(
+                                color: context.appTextSecondary,
                                 fontSize: 15,
                               ),
                             ),
@@ -212,11 +226,11 @@ class _ProductListScreenState extends State<ProductListScreen> {
   void _showFilterBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.cardBackground,
+      backgroundColor: context.appCard,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) {
+      builder: (ctx) {
         return Padding(
           padding: const EdgeInsets.all(20.0),
           child: Column(
@@ -226,41 +240,35 @@ class _ProductListScreenState extends State<ProductListScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Sort & Filter',
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: ctx.appTextPrimary,
                     ),
                   ),
                   IconButton(
-                    icon: const Icon(Icons.close, color: AppColors.textSecondary),
-                    onPressed: () => Navigator.pop(context),
+                    icon: Icon(Icons.close, color: ctx.appTextSecondary),
+                    onPressed: () => Navigator.pop(ctx),
                   ),
                 ],
               ),
-              const Divider(),
+              Divider(color: ctx.appBorder),
               ListTile(
-                title: const Text('Price: Low to High', style: TextStyle(color: AppColors.textPrimary)),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textSecondary),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                title: Text('Price: Low to High', style: TextStyle(color: ctx.appTextPrimary)),
+                trailing: Icon(Icons.arrow_forward_ios, size: 14, color: ctx.appTextSecondary),
+                onTap: () => Navigator.pop(ctx),
               ),
               ListTile(
-                title: const Text('Price: High to Low', style: TextStyle(color: AppColors.textPrimary)),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textSecondary),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                title: Text('Price: High to Low', style: TextStyle(color: ctx.appTextPrimary)),
+                trailing: Icon(Icons.arrow_forward_ios, size: 14, color: ctx.appTextSecondary),
+                onTap: () => Navigator.pop(ctx),
               ),
               ListTile(
-                title: const Text('Top Customer Rated', style: TextStyle(color: AppColors.textPrimary)),
-                trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppColors.textSecondary),
-                onTap: () {
-                  Navigator.pop(context);
-                },
+                title: Text('Top Customer Rated', style: TextStyle(color: ctx.appTextPrimary)),
+                trailing: Icon(Icons.arrow_forward_ios, size: 14, color: ctx.appTextSecondary),
+                onTap: () => Navigator.pop(ctx),
               ),
               const SizedBox(height: 12),
             ],

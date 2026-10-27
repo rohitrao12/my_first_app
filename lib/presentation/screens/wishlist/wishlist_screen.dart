@@ -17,16 +17,16 @@ class WishlistScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appBackground,
         elevation: 0,
-        title: const Text(
+        title: Text(
           'Wishlist',
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: context.appTextPrimary,
           ),
         ),
         actions: [
@@ -37,10 +37,10 @@ class WishlistScreen extends StatelessWidget {
                 onPressed: () {
                   context.read<WishlistBloc>().add(const ClearWishlistEvent());
                 },
-                child: const Text(
+                child: Text(
                   'Clear All',
                   style: TextStyle(
-                    color: AppColors.textSecondary,
+                    color: context.appTextSecondary,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                   ),
@@ -62,27 +62,27 @@ class WishlistScreen extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(
+                    Icon(
                       Icons.favorite_border_rounded,
                       size: 64,
-                      color: AppColors.textMuted,
+                      color: context.appTextMuted,
                     ),
                     const SizedBox(height: 16),
-                    const Text(
+                    Text(
                       'Your Wishlist is Empty',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: context.appTextPrimary,
                       ),
                     ),
                     const SizedBox(height: 8),
-                    const Text(
+                    Text(
                       'Explore our athletic collection and save your favorite gear for later.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 13,
-                        color: AppColors.textSecondary,
+                        color: context.appTextSecondary,
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -125,8 +125,11 @@ class WishlistScreen extends StatelessWidget {
 
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      backgroundColor: AppColors.cardElevated,
-                      content: Text('Added ${product.name} to cart!'),
+                      backgroundColor: context.appCardElevated,
+                      content: Text(
+                        'Added ${product.name} to cart!',
+                        style: TextStyle(color: context.appTextPrimary),
+                      ),
                       duration: const Duration(seconds: 1),
                     ),
                   );

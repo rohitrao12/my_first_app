@@ -27,9 +27,18 @@ class WishlistItemCard extends StatelessWidget {
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          color: context.appCard,
           borderRadius: BorderRadius.circular(14),
-          border: Border.all(color: AppColors.border),
+          border: Border.all(color: context.appBorder),
+          boxShadow: context.isDarkMode
+              ? null
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.04),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
         ),
         child: Row(
           children: [
@@ -52,10 +61,10 @@ class WishlistItemCard extends StatelessWidget {
                 children: [
                   Text(
                     product.name,
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.textPrimary,
+                      color: context.appTextPrimary,
                     ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
@@ -65,26 +74,29 @@ class WishlistItemCard extends StatelessWidget {
                     children: [
                       Text(
                         '₹${product.price.toInt()}',
-                        style: AppTextStyles.priceCurrent,
+                        style: AppTextStyles.priceCurrent.copyWith(
+                          color: context.appTextPrimary,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       if (product.originalPrice > product.price)
                         Text(
                           '₹${product.originalPrice.toInt()}',
-                          style: AppTextStyles.priceOriginal,
+                          style: AppTextStyles.priceOriginal.copyWith(
+                            color: context.appTextMuted,
+                          ),
                         ),
                     ],
                   ),
                   const SizedBox(height: 3),
                   Text(
                     'L | ${product.availableColorNames.first}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
-                      color: AppColors.textSecondary,
+                      color: context.appTextSecondary,
                     ),
                   ),
                   const SizedBox(height: 8),
-                  // ADD TO CART Lime Button
                   PrimaryButton(
                     text: 'ADD TO CART',
                     height: 32,

@@ -33,9 +33,18 @@ class ProductCard extends StatelessWidget {
           },
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.cardBackground,
+          color: context.appCard,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.border, width: 1),
+          border: Border.all(color: context.appBorder, width: 1),
+          boxShadow: context.isDarkMode
+              ? null
+              : [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +81,7 @@ class ProductCard extends StatelessWidget {
                       return IconButton(
                         icon: Icon(
                           isWishlisted ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-                          color: isWishlisted ? AppColors.error : AppColors.textPrimary,
+                          color: isWishlisted ? AppColors.error : context.appTextPrimary,
                           size: 20,
                         ),
                         splashRadius: 18,
@@ -93,7 +102,9 @@ class ProductCard extends StatelessWidget {
                 children: [
                   Text(
                     product.name,
-                    style: AppTextStyles.productTitle,
+                    style: AppTextStyles.productTitle.copyWith(
+                      color: context.appTextPrimary,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -102,13 +113,17 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Text(
                         '₹${product.price.toInt()}',
-                        style: AppTextStyles.priceCurrent,
+                        style: AppTextStyles.priceCurrent.copyWith(
+                          color: context.appTextPrimary,
+                        ),
                       ),
                       const SizedBox(width: 6),
                       if (product.originalPrice > product.price)
                         Text(
                           '₹${product.originalPrice.toInt()}',
-                          style: AppTextStyles.priceOriginal,
+                          style: AppTextStyles.priceOriginal.copyWith(
+                            color: context.appTextMuted,
+                          ),
                         ),
                     ],
                   ),
@@ -123,18 +138,18 @@ class ProductCard extends StatelessWidget {
                       const SizedBox(width: 3),
                       Text(
                         '${product.rating}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: context.appTextPrimary,
                         ),
                       ),
                       const SizedBox(width: 2),
                       Text(
                         '(${_formatReviewCount(product.reviewCount)})',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 11,
-                          color: AppColors.textSecondary,
+                          color: context.appTextSecondary,
                         ),
                       ),
                     ],

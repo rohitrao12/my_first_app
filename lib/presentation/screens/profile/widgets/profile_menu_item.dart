@@ -24,17 +24,19 @@ class ProfileMenuItem extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(bottom: 8),
       child: Material(
-        color: AppColors.cardBackground,
+        color: context.appCard,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: AppColors.border),
+          side: BorderSide(color: context.appBorder),
         ),
         clipBehavior: Clip.antiAlias,
+        elevation: context.isDarkMode ? 0 : 0.5,
+        shadowColor: Colors.black.withValues(alpha: 0.04),
         child: ListTile(
           contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 2),
           leading: Icon(
             icon,
-            color: iconColor ?? AppColors.textSecondary,
+            color: iconColor ?? context.appTextSecondary,
             size: 22,
           ),
           title: Text(
@@ -42,13 +44,13 @@ class ProfileMenuItem extends StatelessWidget {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
-              color: textColor ?? AppColors.textPrimary,
+              color: textColor ?? context.appTextPrimary,
             ),
           ),
           trailing: trailing ??
-              const Icon(
+              Icon(
                 Icons.chevron_right_rounded,
-                color: AppColors.textSecondary,
+                color: context.appTextSecondary,
                 size: 20,
               ),
           onTap: onTap,

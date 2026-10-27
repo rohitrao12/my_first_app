@@ -19,9 +19,9 @@ class ComboVaultCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       height: 154,
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: context.appCard,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.appBorder),
       ),
       child: Stack(
         children: [

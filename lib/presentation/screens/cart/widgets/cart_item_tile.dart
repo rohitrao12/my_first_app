@@ -22,9 +22,18 @@ class CartItemTile extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 12),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: context.appCard,
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.appBorder),
+        boxShadow: context.isDarkMode
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
       ),
       child: Column(
         children: [
@@ -50,10 +59,10 @@ class CartItemTile extends StatelessWidget {
                   children: [
                     Text(
                       item.product.name,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.textPrimary,
+                        color: context.appTextPrimary,
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
@@ -63,22 +72,26 @@ class CartItemTile extends StatelessWidget {
                       children: [
                         Text(
                           '₹${item.product.price.toInt()}',
-                          style: AppTextStyles.priceCurrent,
+                          style: AppTextStyles.priceCurrent.copyWith(
+                            color: context.appTextPrimary,
+                          ),
                         ),
                         const SizedBox(width: 6),
                         if (item.product.originalPrice > item.product.price)
                           Text(
                             '₹${item.product.originalPrice.toInt()}',
-                            style: AppTextStyles.priceOriginal,
+                            style: AppTextStyles.priceOriginal.copyWith(
+                              color: context.appTextMuted,
+                            ),
                           ),
                       ],
                     ),
                     const SizedBox(height: 3),
                     Text(
                       '${item.selectedSize} | ${item.selectedColor}',
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 11,
-                        color: AppColors.textSecondary,
+                        color: context.appTextSecondary,
                       ),
                     ),
                   ],
@@ -87,7 +100,7 @@ class CartItemTile extends StatelessWidget {
 
               // Close / Delete Button
               IconButton(
-                icon: const Icon(Icons.close_rounded, size: 18, color: AppColors.textSecondary),
+                icon: Icon(Icons.close_rounded, size: 18, color: context.appTextSecondary),
                 splashRadius: 16,
                 onPressed: onRemove,
               ),
@@ -103,15 +116,15 @@ class CartItemTile extends StatelessWidget {
               // Stepper: [-] Qty [+]
               Container(
                 decoration: BoxDecoration(
-                  color: AppColors.cardElevated,
+                  color: context.appCardElevated,
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: AppColors.border),
+                  border: Border.all(color: context.appBorder),
                 ),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: const Icon(Icons.remove, size: 16, color: AppColors.textPrimary),
+                      icon: Icon(Icons.remove, size: 16, color: context.appTextPrimary),
                       constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                       padding: EdgeInsets.zero,
                       onPressed: () {
@@ -126,15 +139,15 @@ class CartItemTile extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         '${item.quantity}',
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
-                          color: AppColors.textPrimary,
+                          color: context.appTextPrimary,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.add, size: 16, color: AppColors.textPrimary),
+                      icon: Icon(Icons.add, size: 16, color: context.appTextPrimary),
                       constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                       padding: EdgeInsets.zero,
                       onPressed: () {
@@ -147,9 +160,9 @@ class CartItemTile extends StatelessWidget {
 
               // Trash bin icon
               IconButton(
-                icon: const Icon(
+                icon: Icon(
                   Icons.delete_outline_rounded,
-                  color: AppColors.textSecondary,
+                  color: context.appTextSecondary,
                   size: 20,
                 ),
                 onPressed: onRemove,

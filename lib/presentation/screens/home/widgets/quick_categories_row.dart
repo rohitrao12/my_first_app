@@ -15,7 +15,6 @@ class QuickCategoriesRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Show top 4 categories from mock data (Shorts, Trackpants, T-Shirts, Combos)
     final topCategories = categories.take(4).toList();
 
     return Padding(
@@ -32,9 +31,18 @@ class QuickCategoriesRow extends StatelessWidget {
                   width: 68,
                   height: 68,
                   decoration: BoxDecoration(
-                    color: AppColors.cardBackground,
+                    color: context.appCard,
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border, width: 1.5),
+                    border: Border.all(color: context.appBorder, width: 1.5),
+                    boxShadow: context.isDarkMode
+                        ? null
+                        : [
+                            BoxShadow(
+                              color: Colors.black.withValues(alpha: 0.04),
+                              blurRadius: 6,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(15),
@@ -49,10 +57,10 @@ class QuickCategoriesRow extends StatelessWidget {
                 const SizedBox(height: 8),
                 Text(
                   category.title,
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 12,
                     fontWeight: FontWeight.w600,
-                    color: AppColors.textPrimary,
+                    color: context.appTextPrimary,
                   ),
                 ),
               ],

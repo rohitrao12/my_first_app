@@ -16,7 +16,6 @@ class TrendingProductsSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Top 2 trending products from mockup
     final trendingList = products.take(2).toList();
 
     return Padding(
@@ -27,27 +26,29 @@ class TrendingProductsSection extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
+              Text(
                 'TRENDING NOW',
-                style: AppTextStyles.sectionTitle,
+                style: AppTextStyles.sectionTitle.copyWith(
+                  color: context.appTextPrimary,
+                ),
               ),
               GestureDetector(
                 onTap: onViewAll,
-                child: const Row(
+                child: Row(
                   children: [
                     Text(
                       'View all',
                       style: TextStyle(
                         fontSize: 13,
                         fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
+                        color: context.appTextSecondary,
                       ),
                     ),
-                    SizedBox(width: 4),
+                    const SizedBox(width: 4),
                     Icon(
                       Icons.arrow_forward_rounded,
                       size: 14,
-                      color: AppColors.textSecondary,
+                      color: context.appTextSecondary,
                     ),
                   ],
                 ),

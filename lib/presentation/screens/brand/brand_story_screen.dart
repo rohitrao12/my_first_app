@@ -14,22 +14,22 @@ class BrandStoryScreen extends StatelessWidget {
     final repo = MockShopRepository();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: context.appTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           '11FIT',
           style: TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w900,
             fontStyle: FontStyle.italic,
             letterSpacing: 0.5,
-            color: AppColors.textPrimary,
+            color: context.appTextPrimary,
           ),
         ),
       ),
@@ -43,7 +43,7 @@ class BrandStoryScreen extends StatelessWidget {
               height: 220,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: context.appBorder),
               ),
               child: Stack(
                 children: [
@@ -81,7 +81,7 @@ class BrandStoryScreen extends StatelessWidget {
                             fontSize: 22,
                             fontWeight: FontWeight.w900,
                             fontStyle: FontStyle.italic,
-                            color: AppColors.textPrimary,
+                            color: Colors.white,
                             height: 1.15,
                           ),
                         ),
@@ -114,10 +114,10 @@ class BrandStoryScreen extends StatelessWidget {
                 crossAxisSpacing: 8,
                 childAspectRatio: 0.85,
                 children: [
-                  _buildValueProp(Icons.workspace_premium_outlined, 'Premium Quality'),
-                  _buildValueProp(Icons.accessibility_new_rounded, 'Athletic Fit'),
-                  _buildValueProp(Icons.speed_rounded, 'Built for Performance'),
-                  _buildValueProp(Icons.verified_outlined, 'Trusted by Athletes'),
+                  _buildValueProp(context, Icons.workspace_premium_outlined, 'Premium Quality'),
+                  _buildValueProp(context, Icons.accessibility_new_rounded, 'Athletic Fit'),
+                  _buildValueProp(context, Icons.speed_rounded, 'Built for Performance'),
+                  _buildValueProp(context, Icons.verified_outlined, 'Trusted by Athletes'),
                 ],
               ),
             ),
@@ -129,9 +129,9 @@ class BrandStoryScreen extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 16),
               height: 200,
               decoration: BoxDecoration(
-                color: AppColors.cardBackground,
+                color: context.appCard,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.border),
+                border: Border.all(color: context.appBorder),
               ),
               child: Stack(
                 children: [
@@ -169,7 +169,7 @@ class BrandStoryScreen extends StatelessWidget {
                             fontSize: 18,
                             fontWeight: FontWeight.w900,
                             fontStyle: FontStyle.italic,
-                            color: AppColors.textPrimary,
+                            color: Colors.white,
                             height: 1.15,
                           ),
                         ),
@@ -178,7 +178,7 @@ class BrandStoryScreen extends StatelessWidget {
                           'Gear for every move.',
                           style: TextStyle(
                             fontSize: 12,
-                            color: AppColors.textSecondary,
+                            color: Colors.white70,
                           ),
                         ),
                         const SizedBox(height: 12),
@@ -207,26 +207,39 @@ class BrandStoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildValueProp(IconData icon, String title) {
+  Widget _buildValueProp(BuildContext context, IconData icon, String title) {
     return Container(
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: context.appCard,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.appBorder),
+        boxShadow: context.isDarkMode
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.03),
+                  blurRadius: 4,
+                  offset: const Offset(0, 1),
+                ),
+              ],
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, color: AppColors.limeAccent, size: 24),
+          Icon(
+            icon,
+            color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
+            size: 24,
+          ),
           const SizedBox(height: 6),
           Text(
             title,
             textAlign: TextAlign.center,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 9.5,
               fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+              color: context.appTextPrimary,
               height: 1.2,
             ),
           ),

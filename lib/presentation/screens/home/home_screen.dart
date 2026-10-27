@@ -21,13 +21,15 @@ class HomeScreen extends StatelessWidget {
     final repo = MockShopRepository();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: const AppHeader(),
       body: BlocBuilder<ProductBloc, ProductState>(
         builder: (context, state) {
           if (state.status == ProductStatus.loading) {
-            return const Center(
-              child: CircularProgressIndicator(color: AppColors.limeAccent),
+            return Center(
+              child: CircularProgressIndicator(
+                color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
+              ),
             );
           }
 
@@ -35,10 +37,9 @@ class HomeScreen extends StatelessWidget {
           final trending = state.trendingProducts;
 
           return RefreshIndicator(
-            color: AppColors.limeAccent,
-            backgroundColor: AppColors.cardElevated,
+            color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
+            backgroundColor: context.appCardElevated,
             onRefresh: () async {
-              // Simulated refresh
               await Future.delayed(const Duration(milliseconds: 600));
             },
             child: SingleChildScrollView(

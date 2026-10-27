@@ -28,25 +28,25 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
     final repo = MockShopRepository();
 
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       appBar: AppBar(
-        backgroundColor: AppColors.background,
+        backgroundColor: context.appBackground,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20),
+          icon: Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: context.appTextPrimary),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: const Text(
+        title: Text(
           'Combo Offers',
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            color: context.appTextPrimary,
           ),
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.search_rounded, color: AppColors.textPrimary),
+            icon: Icon(Icons.search_rounded, color: context.appTextPrimary),
             onPressed: () {},
           ),
           const SizedBox(width: 8),
@@ -69,7 +69,7 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                   height: 170,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
-                    border: Border.all(color: AppColors.border),
+                    border: Border.all(color: context.appBorder),
                   ),
                   child: Stack(
                     children: [
@@ -107,7 +107,7 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                                 fontSize: 18,
                                 fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
-                                color: AppColors.textPrimary,
+                                color: Colors.white,
                                 height: 1.15,
                               ),
                             ),
@@ -116,7 +116,7 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                               'Combo Packs',
                               style: TextStyle(
                                 fontSize: 13,
-                                color: AppColors.textSecondary,
+                                color: Colors.white70,
                               ),
                             ),
                             const SizedBox(height: 10),
@@ -154,11 +154,24 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 8),
                           decoration: BoxDecoration(
-                            color: isSelected ? AppColors.limeAccent : AppColors.cardBackground,
+                            color: isSelected
+                                ? (context.isDarkMode ? AppColors.limeAccent : AppColors.lightTextPrimary)
+                                : context.appCard,
                             borderRadius: BorderRadius.circular(20),
                             border: Border.all(
-                              color: isSelected ? AppColors.limeAccent : AppColors.border,
+                              color: isSelected
+                                  ? (context.isDarkMode ? AppColors.limeAccent : AppColors.lightTextPrimary)
+                                  : context.appBorder,
                             ),
+                            boxShadow: context.isDarkMode || !isSelected
+                                ? null
+                                : [
+                                    BoxShadow(
+                                      color: Colors.black.withValues(alpha: 0.1),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    ),
+                                  ],
                           ),
                           alignment: Alignment.center,
                           child: Text(
@@ -166,7 +179,9 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                             style: TextStyle(
                               fontSize: 13,
                               fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                              color: isSelected ? AppColors.textOnLime : AppColors.textPrimary,
+                              color: isSelected
+                                  ? (context.isDarkMode ? AppColors.textOnLime : Colors.white)
+                                  : context.appTextPrimary,
                             ),
                           ),
                         ),
@@ -209,9 +224,18 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
   Widget _buildComboCard(BuildContext context, ComboModel combo) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.cardBackground,
+        color: context.appCard,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: context.appBorder),
+        boxShadow: context.isDarkMode
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.04),
+                  blurRadius: 6,
+                  offset: const Offset(0, 2),
+                ),
+              ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,9 +264,9 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                 top: 4,
                 right: 4,
                 child: IconButton(
-                  icon: const Icon(
+                  icon: Icon(
                     Icons.favorite_border_rounded,
-                    color: AppColors.textPrimary,
+                    color: context.appTextPrimary,
                     size: 20,
                   ),
                   onPressed: () {},
@@ -258,7 +282,9 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
               children: [
                 Text(
                   combo.title,
-                  style: AppTextStyles.productTitle,
+                  style: AppTextStyles.productTitle.copyWith(
+                    color: context.appTextPrimary,
+                  ),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -267,22 +293,26 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                   children: [
                     Text(
                       '₹${combo.price.toInt()}',
-                      style: AppTextStyles.priceCurrent,
+                      style: AppTextStyles.priceCurrent.copyWith(
+                        color: context.appTextPrimary,
+                      ),
                     ),
                     const SizedBox(width: 6),
                     Text(
                       '₹${combo.originalPrice.toInt()}',
-                      style: AppTextStyles.priceOriginal,
+                      style: AppTextStyles.priceOriginal.copyWith(
+                        color: context.appTextMuted,
+                      ),
                     ),
                   ],
                 ),
                 const SizedBox(height: 4),
                 Text(
                   'Save ₹${combo.savings.toInt()}',
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
-                    color: AppColors.limeAccent,
+                    color: context.isDarkMode ? AppColors.limeAccent : AppColors.limeAccentDark,
                   ),
                 ),
                 const SizedBox(height: 10),
@@ -296,8 +326,11 @@ class _ComboOffersScreenState extends State<ComboOffersScreen> {
                     context.read<CartBloc>().add(AddComboToCartEvent(combo));
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        backgroundColor: AppColors.cardElevated,
-                        content: Text('Added ${combo.title} to cart!'),
+                        backgroundColor: context.appCardElevated,
+                        content: Text(
+                          'Added ${combo.title} to cart!',
+                          style: TextStyle(color: context.appTextPrimary),
+                        ),
                         duration: const Duration(seconds: 1),
                       ),
                     );

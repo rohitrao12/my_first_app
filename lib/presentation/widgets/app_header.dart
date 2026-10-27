@@ -5,6 +5,7 @@ import '../../core/theme/app_text_styles.dart';
 import '../../logic/cart/cart_bloc.dart';
 import '../../logic/cart/cart_state.dart';
 import '../../logic/navigation/navigation_cubit.dart';
+import '../../logic/theme/theme_cubit.dart';
 import '../../logic/wishlist/wishlist_bloc.dart';
 import '../../logic/wishlist/wishlist_state.dart';
 import '../screens/cart/cart_screen.dart';
@@ -25,24 +26,47 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      backgroundColor: AppColors.background,
+      backgroundColor: context.appBackground,
       elevation: 0,
       scrolledUnderElevation: 0,
       title: Row(
         children: [
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-            child: const Text(
+            child: Text(
               '11FIT',
-              style: AppTextStyles.brandLogo,
+              style: AppTextStyles.brandLogo.copyWith(
+                color: context.appTextPrimary,
+              ),
             ),
           ),
         ],
       ),
       actions: showActions
           ? [
+              // Theme Toggle Action Button (Light / Dark mode)
+              BlocBuilder<ThemeCubit, ThemeMode>(
+                builder: (context, themeMode) {
+                  final isDark = themeMode == ThemeMode.dark;
+                  return IconButton(
+                    icon: Icon(
+                      isDark ? Icons.light_mode_rounded : Icons.dark_mode_outlined,
+                      color: isDark ? AppColors.limeAccent : context.appTextPrimary,
+                      size: 22,
+                    ),
+                    tooltip: isDark ? 'Switch to Light (White) Theme' : 'Switch to Dark Theme',
+                    onPressed: () {
+                      context.read<ThemeCubit>().toggleTheme();
+                    },
+                  );
+                },
+              ),
               IconButton(
-                icon: const Icon(Icons.search_rounded, color: AppColors.textPrimary, size: 24),
+                icon: Icon(
+                  Icons.search_rounded,
+                  color: context.appTextPrimary,
+                  size: 24,
+                ),
                 tooltip: 'Search',
                 onPressed: () {
                   if (onSearchPressed != null) {
@@ -59,7 +83,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                     alignment: Alignment.center,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.favorite_border_rounded, color: AppColors.textPrimary, size: 24),
+                        icon: Icon(
+                          Icons.favorite_border_rounded,
+                          color: context.appTextPrimary,
+                          size: 24,
+                        ),
                         tooltip: 'Wishlist',
                         onPressed: () {
                           context.read<NavigationCubit>().setTab(2);
@@ -88,7 +116,11 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                     alignment: Alignment.center,
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.shopping_bag_outlined, color: AppColors.textPrimary, size: 24),
+                        icon: Icon(
+                          Icons.shopping_bag_outlined,
+                          color: context.appTextPrimary,
+                          size: 24,
+                        ),
                         tooltip: 'Cart',
                         onPressed: () {
                           Navigator.of(context).push(
@@ -104,8 +136,10 @@ class AppHeader extends StatelessWidget implements PreferredSizeWidget {
                           right: 8,
                           child: Container(
                             padding: const EdgeInsets.all(4),
-                            decoration: const BoxDecoration(
-                              color: AppColors.limeAccent,
+                            decoration: BoxDecoration(
+                              color: context.isDarkMode
+                                  ? AppColors.limeAccent
+                                  : AppColors.limeAccentDark,
                               shape: BoxShape.circle,
                             ),
                             constraints: const BoxConstraints(
